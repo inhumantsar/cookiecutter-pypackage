@@ -15,9 +15,8 @@ def _browser(path):
   webbrowser.open("file://" + pathname2url(abspath(path)))
 
 
-@nox.parametrize('python', ['2.7', '3.6', '3.7'])
-@nox.session(reuse_venv=True)
-def tests(session, python):
+@nox.session(reuse_venv=True, python=['2.7', '3.6', '3.7'])
+def test(session, python):
   with open('requirements_dev.txt', 'r') as reqs_file:
     reqs = reqs_file.readlines()
   session.install(*reqs)
@@ -25,16 +24,25 @@ def tests(session, python):
   session.run('pytest')
 
 
-@nox.parametrize('python', '3.7')
 @nox.session(reuse_venv=True)
-def lint(session, python):
+def check_coverage(session):
+  for cmd in [
+        ['coverage', 'run', '--source', '{{ cookiecutter.project_slug }}', '-m', 'pytest'],
+        ['coverage', 'report', '-m'],
+        ['coverage', 'html']
+      ]:
+	  session.run(*cmd)
+  _browser('htmlcov/index.html')
+
+
+@nox.session(reuse_venv=True)
+def lint(session):
   session.install('pylint')
   session.run('pylint')
 
 
-@nox.parametrize('python', '3.7')
 @nox.session(reuse_venv=True)
-def docs(session, python):
+def build_docs(session):
   session.install('Sphinx')
   
   for del_file in ['docs/{{ cookiecutter.project_slug }}.rst',
@@ -47,13 +55,7 @@ def docs(session, python):
   _browser('docs/')
 
 
-@nox.parametrize('python', '3.7')
 @nox.session(reuse_venv=True)
-def coverage(session, python):
-  for cmd in [
-        ['coverage', 'run', '--source', '{{ cookiecutter.project_slug }}', '-m', 'pytest'],
-        ['coverage', 'report', '-m'],
-        ['coverage', 'html']
-      ]:
-	  session.run(*cmd)
-  _browser('htmlcov/index.html')
+def build_sdist(session):
+  session.run('python3', 'setup.py', 'sdist')
+  assert os.path.exists('dist/')
