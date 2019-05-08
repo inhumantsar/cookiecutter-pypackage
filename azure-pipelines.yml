@@ -8,7 +8,7 @@ trigger:
 
 
 jobs:
-  - job: test
+  - job: Test
     pool:
       vmImage: 'ubuntu-latest'
     strategy:
@@ -35,7 +35,7 @@ jobs:
         displayName: 'Test & Lint'
 
 
-  - job: build
+  - job: Build
     pool:
       vmImage: 'ubuntu-latest'
     steps:

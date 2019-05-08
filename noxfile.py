@@ -27,7 +27,7 @@ def test(session, python):
 @nox.session(reuse_venv=True)
 def check_coverage(session):
   for cmd in [
-        ['coverage', 'run', '--source', '{{ cookiecutter.project_slug }}', '-m', 'pytest'],
+        ['coverage', 'run', '--source', '{{cookiecutter.project_slug}}', '-m', 'pytest'],
         ['coverage', 'report', '-m'],
         ['coverage', 'html']
       ]:
@@ -49,9 +49,9 @@ def build_docs(session):
 	                 'docs/modules.rst']:
     try:
       os.remove(del_file)
-    except FileNotFoundError as fnfe:
+    except FileNotFoundError as fnfe: 
       pass
-  session.run('sphinx-apidoc', '-o', 'docs/', '{{ cookiecutter.project_slug }}')
+  session.run('sphinx-apidoc', '-o', 'docs/', '{{cookiecutter.project_slug}}')
   _browser('docs/')
 
 
