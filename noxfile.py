@@ -17,6 +17,7 @@ def _browser(path):
 
 @nox.session(reuse_venv=True, python=['2.7', '3.6', '3.7'])
 def test(session, python):
+  """Runs pytest"""
   with open('requirements_dev.txt', 'r') as reqs_file:
     reqs = reqs_file.readlines()
   session.install(*reqs)
@@ -25,37 +26,26 @@ def test(session, python):
 
 
 @nox.session(reuse_venv=True)
-def check_coverage(session):
-  for cmd in [
-        ['coverage', 'run', '--source', '{{cookiecutter.project_slug}}', '-m', 'pytest'],
-        ['coverage', 'report', '-m'],
-        ['coverage', 'html']
-      ]:
-	  session.run(*cmd)
-  _browser('htmlcov/index.html')
-
-
-@nox.session(reuse_venv=True)
-def lint(session):
-  session.install('pylint')
-  session.run('pylint')
-
-
-@nox.session(reuse_venv=True)
 def build_docs(session):
+  """Builds documentation using Sphinx. Outputs to docs/, will open browser."""
   session.install('Sphinx')
-  
-  for del_file in ['docs/{{ cookiecutter.project_slug }}.rst',
+
+  # clean up a bit first
+  for del_file in ['docs/{{cookiecutter.project_slug}}.rst',
 	                 'docs/modules.rst']:
     try:
       os.remove(del_file)
     except FileNotFoundError as fnfe: 
       pass
+  
+  # build docs
   session.run('sphinx-apidoc', '-o', 'docs/', '{{cookiecutter.project_slug}}')
+  # TODO: upload to S3? readthedocs? github pages?
   _browser('docs/')
 
 
 @nox.session(reuse_venv=True)
 def build_sdist(session):
+  """Builds Source Distribution package. Outputs to dist/"""
   session.run('python3', 'setup.py', 'sdist')
   assert os.path.exists('dist/')
