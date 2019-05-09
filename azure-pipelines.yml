@@ -50,3 +50,10 @@ jobs:
       - script: |
           nox -s build_docs build_sdist
         displayName: 'Build'
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.Repository.LocalPath)/dist/'
+          ArtifactName: '*.tar.gz'
+          publishLocation: 'Container'
+        displayName: 'Publish Package'
