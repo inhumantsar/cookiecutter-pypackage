@@ -15,7 +15,7 @@ def _browser(path):
   webbrowser.open("file://" + pathname2url(abspath(path)))
 
 
-@nox.session(reuse_venv=True, python=['2.7', '3.6', '3.7'])
+@nox.session(reuse_venv=True, python=['3.6', '3.7'])
 def test(session):
   """Runs pytest"""
   with open('requirements_dev.txt', 'r') as reqs_file:
