@@ -54,6 +54,6 @@ jobs:
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.Repository.LocalPath)/dist/'
-          ArtifactName: '*.tar.gz'
+          ArtifactName: '{{ cookiecutter.project_slug }}'
           publishLocation: 'Container'
         displayName: 'Publish Package'

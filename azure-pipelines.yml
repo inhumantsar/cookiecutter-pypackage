@@ -54,6 +54,5 @@ jobs:
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.Repository.LocalPath)/dist/'
-          ArtifactName: '*.tar.gz'
           publishLocation: 'Container'
         displayName: 'Publish Package'
