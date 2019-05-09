@@ -16,7 +16,7 @@ def _browser(path):
 
 
 @nox.session(reuse_venv=True, python=['2.7', '3.6', '3.7'])
-def test(session, python):
+def test(session):
   """Runs pytest"""
   with open('requirements_dev.txt', 'r') as reqs_file:
     reqs = reqs_file.readlines()
