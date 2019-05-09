@@ -29,8 +29,8 @@ jobs:
         displayName: 'Install dependencies'
 
       - script: |
-          nox -s test
-        displayName: 'Test'
+          nox -s test check_coverage lint
+        displayName: 'Test & Lint'
 
 
   - job: Build
@@ -54,5 +54,6 @@ jobs:
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.Repository.LocalPath)/dist/'
+          ArtifactName: '{{ cookiecutter.project_slug }}'
           publishLocation: 'Container'
         displayName: 'Publish Package'
